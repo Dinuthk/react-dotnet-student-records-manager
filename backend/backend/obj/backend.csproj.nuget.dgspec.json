@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Github_work_place\\intern-task01\\backend\\backend\\backend\\backend.csproj": {}
+    "D:\\Github_work_place\\intern-task01\\backend\\backend\\backend.csproj": {}
   },
   "projects": {
-    "D:\\Github_work_place\\intern-task01\\backend\\backend\\backend\\backend.csproj": {
+    "D:\\Github_work_place\\intern-task01\\backend\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Github_work_place\\intern-task01\\backend\\backend\\backend\\backend.csproj",
+        "projectUniqueName": "D:\\Github_work_place\\intern-task01\\backend\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "D:\\Github_work_place\\intern-task01\\backend\\backend\\backend\\backend.csproj",
+        "projectPath": "D:\\Github_work_place\\intern-task01\\backend\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\Github_work_place\\intern-task01\\backend\\backend\\backend\\obj\\",
+        "outputPath": "D:\\Github_work_place\\intern-task01\\backend\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -50,6 +50,16 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.13, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[8.0.3, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.6.2, )"
