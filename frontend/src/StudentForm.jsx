@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { StudentContext } from "./StudentContext";
 import "./StudentForm.css";
 
 const StudentForm = () => {
 
     const navigate = useNavigate();
+    const { students, setStudents } = useContext(StudentContext);
     
   const [formData, setFormData] = useState({
     name: "",
@@ -15,7 +17,7 @@ const StudentForm = () => {
     phone: "",
   });
 
-  const [students, setStudents] = useState([]);
+  //const [students, setStudents] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
