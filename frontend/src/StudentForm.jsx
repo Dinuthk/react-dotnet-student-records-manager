@@ -1,13 +1,34 @@
 import { useNavigate } from 'react-router-dom';
-import React, { useState, useContext } from "react";
-import { StudentContext } from "./StudentContext";
+import React, { useState, useContext ,useEffect } from "react";
 import "./StudentForm.css";
 
 const StudentForm = () => {
+  
+  const [students, setStudents] = useState([]);
+  const navigate = useNavigate();
+  console.log(students);
 
-    const navigate = useNavigate();
-    const { students, setStudents } = useContext(StudentContext);
-    
+
+  // Fetch students when component mounts
+  useEffect(() => {
+    async function getData() {
+      const url = "https://localhost:7047/api/Student";
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
+
+        const json = await response.json();
+        setStudents(json); // Save the fetched data to state
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    getData();
+  }, []);
+
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -16,30 +37,46 @@ const StudentForm = () => {
     email: "",
     phone: "",
   });
-
-  //const [students, setStudents] = useState([]);
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  
+  //Post data to API
+  const postData = async () => {
+    if (formData.fullName && formData.dateOfBirth && formData.email && formData.telephone) {
+      try {
+        const response = await fetch("https://localhost:7047/api/Student", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
 
-  const handleAdd = () => {
-    if (
-      formData.name &&
-      formData.dob &&
-      formData.email &&
-      formData.phone
-    ) {
-      setStudents((prev) => [...prev, formData]);
-      setFormData({
-        name: "",
-        address: "",
-        dob: "",
-        gender: "",
-        email: "",
-        phone: "",
-      });
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
+        }
+
+        const newStudent = await response.json(); // If your API returns the created student
+        setStudents((prev) => [...prev, newStudent]); // Update local list
+        alert("Student added successfully");
+
+        // Clear form
+        setFormData({
+          
+          address: "",
+          dateOfBirth: "",
+          email: "",
+          fullName: "",
+          gender: "",
+          telephone: "",
+        });
+      } catch (error) {
+        console.error("Error posting student:", error.message);
+        alert("Failed to add student.");
+      }
     } else {
       alert("Please fill required fields");
     }
@@ -58,7 +95,7 @@ const StudentForm = () => {
       <div className="form-section">
         <label>
           Full Name
-          <input name="name" value={formData.name} onChange={handleChange} />
+          <input name="fullName" value={formData.fullName} onChange={handleChange} />
         </label>
 
         <label>
@@ -69,7 +106,7 @@ const StudentForm = () => {
         <div className="row">
           <label>
             Date of Birth
-            <input type="date" name="dob" value={formData.dob} onChange={handleChange} />
+            <input type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} />
           </label>
 
           <div className="gender-section">
@@ -86,10 +123,10 @@ const StudentForm = () => {
 
         <label>
           Telephone
-          <input name="phone" value={formData.phone} onChange={handleChange} />
+          <input name="telephone" value={formData.telephone} onChange={handleChange} />
         </label>
 
-        <button onClick={handleAdd} className="add-btn">Add</button>
+        <button onClick={postData} className="add-btn">Add</button>
 
         <table>
           <thead>  {/*Table header - tfoot (Table Footer)*/}
@@ -103,10 +140,10 @@ const StudentForm = () => {
           <tbody>  {/*Table body */}
             {students.map((student, i) => ( 
               <tr key={i}> {/*Table rows*/} 
-                <td>{student.name}</td> {/*Table data*/}
-                <td>{student.dob}</td>
+                <td>{student.fullName}</td> {/*Table data*/}
+                <td>{student.dateOfBirth}</td>
                 <td>{student.email}</td>
-                <td>{student.phone}</td>
+                <td>{student.telephone}</td>
               </tr>
             ))}
           </tbody>
