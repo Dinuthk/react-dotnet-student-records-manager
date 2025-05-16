@@ -71,7 +71,6 @@ const StudentList = () => {
                 </td>
                 <td>{student.telephone}</td>
                 <td>
-                  {/* Replace "x" with action buttons if needed */}
                   x
                 </td>
               </tr>
