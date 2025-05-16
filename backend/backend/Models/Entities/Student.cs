@@ -26,6 +26,6 @@ namespace backend.Models.Entities
 
         [Required]
         [Phone]
-        public string Telephone { get; set; }
+        public string ? Telephone { get; set; }
     }
 }
