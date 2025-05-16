@@ -36,7 +36,7 @@ namespace backend.Controllers
         //    return Ok(students); // return 200 OK http response
         //}
         [HttpGet]
-        [Route("by-phone/{phone}")] // e.g. localhost:5000/api/Students/by-phone/0711234567
+        [Route("{phone}")] // e.g. localhost:5000/api/Students/by-phone/0711234567
         public IActionResult GetStudentByPhone(string phone)
         {
             var student = dbContext.Students.FirstOrDefault(s => s.Telephone == phone);
@@ -93,10 +93,10 @@ namespace backend.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:guid}")]
-        public IActionResult DeleteStudent(Guid id)
+        [Route("{telephone}")]
+        public IActionResult DeleteStudent(int telephone)
         {
-            var student = dbContext.Students.Find(id);
+            var student = dbContext.Students.Find(telephone);
 
             if (student is null)
             {
