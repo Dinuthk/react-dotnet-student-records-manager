@@ -46,7 +46,7 @@
         }
       }
     },
-    "/api/Student/by-phone/{phone}": {
+    "/api/Student/{phone}": {
       "get": {
         "tags": [
           "Student"
@@ -108,19 +108,21 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/Student/{telephone}": {
       "delete": {
         "tags": [
           "Student"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "telephone",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
