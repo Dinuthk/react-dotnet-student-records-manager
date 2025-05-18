@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Typography, Box, TextField, Button } from "@mui/material";
-import {
-  Table,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from "@mui/material";
-import { createStudent, getStudents } from "../services/studentService";
+import { Table, Radio, RadioGroup, FormControlLabel } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { getStudentById, updateStudent } from "../services/studentService";
 
-const StudentForm = () => {
-  const [students, setStudents] = useState([]);
+const StudentEdit = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   const [formData, setFormData] = useState({
     fullName: "",
     address: "",
@@ -25,70 +17,50 @@ const StudentForm = () => {
     email: "",
     telephone: "",
   });
-  const navigate = useNavigate();
 
-  {
-    /* Function to fetch student data */
-  }
   const fetchUsers = async () => {
-    const response = await getStudents();
+    try {
+      const data = await getStudentById(id);
 
-    const formattedStudents = response.map((student) => ({
-      ...student,
-      dateOfBirth: new Date(student.dateOfBirth).toISOString().slice(0, 10),
-    }));
+      const formattedData = {
+        ...data,
+        dateOfBirth: data.dateOfBirth
+          ? new Date(data.dateOfBirth).toISOString().slice(0, 10)
+          : "",
+      };
 
-    setStudents(formattedStudents);
+      setFormData(formattedData);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
   };
+
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  {
-    /* Function to create Student */
-  }
-  const addStudent = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await createStudent(formData);
-      console.log("Student created:", response);
-      alert("Student created successfully!");
-      setFormData({
-        fullName: "",
-        address: "",
-        dateOfBirth: "",
-        gender: "",
-        email: "",
-        telephone: "",
-      });
-    } catch (error) {
-      alert("Please fill required fields", error);
-      console.error("Error creating student:", error);
-    }
-    fetchUsers();
-  };
-
-  {
-    /* Function to handle form submission */
-  }
-  const handleSubmit = () => {
-    alert("Form submitted!");
-    console.log("Submitted students:", students);
-    navigate("/students");
-  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  useEffect(() => {
-    console.log("Updated formData:", formData);
-  }, [formData]);
+  const handleUpdate = async(e) => {
+    try {
+      if (window.confirm("Are you sure you want to update this student?")) {
+        await updateStudent(id, formData);
+        alert("Student updated successfully!");
+        navigate("/students");
+        //console.log(`Edit student with ID: ${id}`);
+      }
+    } catch (error) {
+      console.error("Error deleting student:", error);
+    }
+  };
 
   return (
     <Box sx={{ p: 3, maxWidth: 800, mx: "auto" }}>
       <Typography variant="h5" component="h1">
-        Student Registration
+        Student Details Edit
       </Typography>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 4 }}>
@@ -129,6 +101,7 @@ const StudentForm = () => {
               fullWidth
               InputLabelProps={{ shrink: true }}
               name="dateOfBirth"
+              value={formData.dateOfBirth}
               onChange={handleChange}
             />
           </Box>
@@ -190,53 +163,8 @@ const StudentForm = () => {
             mb: 2,
           }}
         >
-          <Button variant="contained" onClick={addStudent}>
-            Add
-          </Button>
-        </Box>
-
-        {/* Table */}
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align="right">Date of Birth</TableCell>
-                <TableCell align="right">Email</TableCell>
-                <TableCell align="right">Telephone</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {(students || []).map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.fullName}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {row.dateOfBirth}
-                  </TableCell>
-
-                  <TableCell align="right">{row.email}</TableCell>
-                  <TableCell align="right">{row.telephone}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            mb: 2,
-          }}
-        >
-          <Button variant="contained" onClick={handleSubmit}>
-            Submit
+          <Button variant="contained" onClick={handleUpdate}>
+            Update
           </Button>
         </Box>
       </Box>
@@ -244,4 +172,4 @@ const StudentForm = () => {
   );
 };
 
-export default StudentForm;
+export default StudentEdit;

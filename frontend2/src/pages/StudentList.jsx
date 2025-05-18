@@ -16,19 +16,28 @@ import {
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { deleteStudent, getStudents } from "../services/studentService";
+import { useNavigate } from "react-router-dom";
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   {
     /* Function to fetch student data */
   }
   const fetchUsers = async () => {
     const response = await getStudents();
-    setStudents(response);
+
+    const formattedStudents = response.map((student) => ({
+      ...student,
+      dateOfBirth: new Date(student.dateOfBirth).toISOString().slice(0, 10),
+    }));
+
+    setStudents(formattedStudents);
   };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -37,7 +46,14 @@ const StudentList = () => {
     /* Function to handle edit actions */
   }
   const handleEdit = (id) => {
-    console.log(`Edit student with ID: ${id}`);
+    try {
+      if (window.confirm("Are you sure you want to update this student?")) {
+        navigate("/students/edit/" + id);
+        console.log(`Edit student with ID: ${id}`);
+      }
+    } catch (error) {
+      console.error("Error deleting student:", error);
+    }
   };
   {
     /* Function to handle delete action */
@@ -75,7 +91,15 @@ const StudentList = () => {
         <Typography sx={{ width: "120px" }}>Telephone</Typography>
 
         {/* Telephone Field With Search Button */}
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            mb: 2,
+            maxWidth: 400,
+            gap: 4,
+          }}
+        >
           <TextField
             type="tel"
             variant="outlined"
