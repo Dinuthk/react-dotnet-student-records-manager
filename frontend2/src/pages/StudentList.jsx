@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Box,
@@ -15,32 +15,24 @@ import {
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { deleteStudent, getStudents } from "../services/studentService";
 
 const StudentList = () => {
-  //const [students, setStudents] = useState([]);
-  const students = [
-    {
-      id: 1,
-      name: "Alice Johnson",
-      email: "alice@example.com",
-      phone: "0771234567",
-      dob: "2000-05-15",
-    },
-    {
-      id: 2,
-      name: "Bob Smith",
-      email: "bob@example.com",
-      phone: "0719876543",
-      dob: "1999-11-22",
-    },
-    {
-      id: 3,
-      name: "Charlie Perera",
-      email: "charlie@example.com",
-      phone: "0754567890",
-      dob: "2001-03-10",
-    },
-  ];
+  const [students, setStudents] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
+
+  {
+    /* Function to fetch student data */
+  }
+  const fetchUsers = async () => {
+    const response = await getStudents();
+    setStudents(response);
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   {
     /* Function to handle edit actions */
   }
@@ -50,78 +42,108 @@ const StudentList = () => {
   {
     /* Function to handle delete action */
   }
-  const handleDelete = (id) => {
-    console.log(`Delete student with ID: ${id}`);
+  const handleDelete = async (id) => {
+    try {
+      if (window.confirm("Are you sure you want to delete this student?")) {
+        await deleteStudent(id);
+        fetchUsers();
+      }
+    } catch (error) {
+      console.error("Error deleting student:", error);
+    }
   };
 
+  {
+    /* Function to handle search */
+  }
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearch(searchInput);
+  };
+
+  const filteredStudents = students.filter((student) =>
+    student.telephone?.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-     <Box sx={{ p: 3, maxWidth: 800, mx: 'auto'}}>
+    <Box sx={{ p: 3, maxWidth: 1000, mx: "auto" }}>
       <Typography variant="h5" component="h1">
         Student List
       </Typography>
-      
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2,mt: 4}}>
+
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 4 }}>
         <Typography sx={{ width: "120px" }}>Telephone</Typography>
 
         {/* Telephone Field With Search Button */}
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-            <TextField
+          <TextField
             type="tel"
             variant="outlined"
             size="small"
             fullWidth
             placeholder="e.g. 0771234567"
-            />
-            <Button variant="contained">Search</Button>
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+          <Button variant="contained" onClick={handleSearch}>
+            Search
+          </Button>
         </Box>
 
         {/* Table */}
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
-                <TableRow>
+              <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell align="right">Date of Birth</TableCell>
                 <TableCell align="right">Email</TableCell>
                 <TableCell align="right">Telephone</TableCell>
                 <TableCell align="right">Action</TableCell>
-                </TableRow>
+              </TableRow>
             </TableHead>
             <TableBody>
-                {students.map((row) => (
-                <TableRow
-                    key={row.name}
+              {filteredStudents.length > 0 ? (
+                filteredStudents.map((row) => (
+                  <TableRow
+                    key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
+                  >
                     <TableCell component="th" scope="row">
-                    {row.dob}
+                      {row.fullName}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {row.dateOfBirth}
                     </TableCell>
                     <TableCell align="right">{row.email}</TableCell>
-                    <TableCell align="right">{row.phone}</TableCell>
-                    <TableCell align="right">{row.dob}</TableCell>
+                    <TableCell align="right">{row.telephone}</TableCell>
                     <TableCell align="right">
-                    <IconButton
+                      <IconButton
                         color="primary"
                         onClick={() => handleEdit(row.id)}
-                    >
-                        {" "}
-                        <EditOutlinedIcon />{" "}
-                    </IconButton>
-                    <IconButton
+                      >
+                        <EditOutlinedIcon />
+                      </IconButton>
+                      <IconButton
                         color="error"
                         onClick={() => handleDelete(row.id)}
-                    >
-                        {" "}
-                        <DeleteOutlineIcon />{" "}
-                    </IconButton>
+                      >
+                        <DeleteOutlineIcon />
+                      </IconButton>
                     </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} align="center">
+                    No student data available.
+                  </TableCell>
                 </TableRow>
-                ))}
+              )}
             </TableBody>
-            </Table>
+          </Table>
         </TableContainer>
       </Box>
-      
     </Box>
   );
 };

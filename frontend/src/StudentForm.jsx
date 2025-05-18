@@ -75,7 +75,7 @@ const StudentForm = () => {
         });
       } catch (error) {
         console.error("Error posting student:", error.message);
-        alert("Failed to add student.");
+        alert("Failed to add student.", error.message);
       }
     } else {
       alert("Please fill required fields");

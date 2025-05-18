@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Box, TextField, Button } from "@mui/material";
 import {
   Table,
@@ -12,9 +12,66 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { createStudent, getStudents } from "../services/studentService";
+import { useNavigate } from "react-router-dom";
 
 const StudentForm = () => {
   const [students, setStudents] = useState([]);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    address: "",
+    dateOfBirth: "",
+    gender: "",
+    email: "",
+    telephone: "",
+  });
+  const navigate = useNavigate();
+
+  {/* Function to fetch student data */}
+  const fetchUsers = async () => {
+    const response = await getStudents();
+    setStudents(response);
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  { /* Function to create Student */}
+  const addStudent = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await createStudent(formData);
+      console.log("Student created:", response);
+      alert("Student created successfully!");
+      setFormData({
+        fullName: "",
+        address: "",
+        dateOfBirth: "",
+        gender: "",
+        email: "",
+        telephone: "",
+      });
+    } catch (error) {
+      alert("Please fill required fields", error);
+      console.error("Error creating student:", error);
+    }
+    fetchUsers();
+  };
+
+{/* Function to handle form submission */}
+  const handleSubmit = () => {
+    alert("Form submitted!");
+    console.log("Submitted students:", students);
+    navigate("/students");
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  useEffect(() => {
+    console.log("Updated formData:", formData);
+  }, [formData]);
 
   return (
     <Box sx={{ p: 3, maxWidth: 800, mx: "auto" }}>
@@ -22,102 +79,134 @@ const StudentForm = () => {
         Student Registration
       </Typography>
 
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2,mt: 4}}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 4 }}>
         {/* Full Name Field */}
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-            <Typography sx={{ width: "120px" }}>Full Name</Typography>
-            <TextField variant="outlined" size="small" fullWidth />
+          <Typography sx={{ width: "120px" }}>Full Name</Typography>
+          <TextField
+            variant="outlined"
+            size="small"
+            fullWidth
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleChange}
+          />
         </Box>
 
         {/* Address Field */}
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-            <Typography sx={{ width: "120px" }}>Adress</Typography>
-            <TextField variant="outlined" size="small" fullWidth />
+          <Typography sx={{ width: "120px" }}>Adress</Typography>
+          <TextField
+            variant="outlined"
+            size="small"
+            fullWidth
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+          />
         </Box>
 
-
-        <Box sx={{ display: 'flex', gap: 2 }}>
-                {/* Date of Birth Field */}
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <Typography sx={{ width: "150px" }}>Date of Birth</Typography>
-                <TextField
-                type="date"
-                variant="outlined"
-                size="small"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                />
-            </Box>
-
-            {/* Gender Field */}
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <Typography sx={{ width: "120px" }}>Gender</Typography>
-                <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-                >
-                <FormControlLabel value="female" control={<Radio />} label="Female" />
-                <FormControlLabel value="male" control={<Radio />} label="Male" />
-                </RadioGroup>
-            </Box>
-        </Box>
-        
-        {/* Email Field */}
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <Typography sx={{ width: '120px' }}>Email</Typography>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          {/* Date of Birth Field */}
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <Typography sx={{ width: "150px" }}>Date of Birth</Typography>
             <TextField
+              type="date"
+              variant="outlined"
+              size="small"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              name="dateOfBirth"
+              value={formData.dateOfBirth}
+              onChange={handleChange}
+            />
+          </Box>
+
+          {/* Gender Field */}
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <Typography sx={{ width: "120px" }}>Gender</Typography>
+            <RadioGroup
+              row
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+            >
+              <FormControlLabel
+                value="female"
+                control={<Radio />}
+                label="female"
+              />
+              <FormControlLabel value="male" control={<Radio />} label="male" />
+            </RadioGroup>
+          </Box>
+        </Box>
+
+        {/* Email Field */}
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <Typography sx={{ width: "120px" }}>Email</Typography>
+          <TextField
             type="email"
             variant="outlined"
             size="small"
             fullWidth
             placeholder="e.g. yourname@example.com"
-            />
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
         </Box>
 
         {/* Telephone Field */}
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-            <Typography sx={{ width: "120px" }}>Telephone</Typography>
-            <TextField
+          <Typography sx={{ width: "120px" }}>Telephone</Typography>
+          <TextField
             type="tel"
             variant="outlined"
             size="small"
             fullWidth
             placeholder="e.g. 0771234567"
-            />
+            name="telephone"
+            value={formData.telephone}
+            onChange={handleChange}
+          />
         </Box>
 
-        <Button variant="contained">Add</Button>
+        <Button variant="contained" onClick={addStudent}>
+          Add
+        </Button>
 
         {/* Table */}
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
-                <TableRow>
+              <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell align="right">Date of Birth</TableCell>
                 <TableCell align="right">Email</TableCell>
                 <TableCell align="right">Telephone</TableCell>
-                </TableRow>
+              </TableRow>
             </TableHead>
             <TableBody>
-                {students.map((row) => (
+              {(students || []).map((row) => (
                 <TableRow
-                    key={row.name}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  key={row.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                    <TableCell component="th" scope="row">
-                    {row.dob}
-                    </TableCell>
-                    <TableCell align="right">{row.email}</TableCell>
-                    <TableCell align="right">{row.phone}</TableCell>
+                  <TableCell component="th" scope="row">
+                    {row.fullName}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {row.dateOfBirth}
+                  </TableCell>
+                  <TableCell align="right">{row.email}</TableCell>
+                  <TableCell align="right">{row.telephone}</TableCell>
                 </TableRow>
-                ))}
+              ))}
             </TableBody>
-            </Table>
+          </Table>
         </TableContainer>
 
-        <Button variant="contained">Submit</Button>
+        <Button variant="contained" onClick={handleSubmit}>Submit</Button>
       </Box>
     </Box>
   );
