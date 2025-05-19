@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { createStudent, getStudents } from "../services/studentService";
 import { useNavigate } from "react-router-dom";
+import MainForm from "../components/forms/MainForm";
 
 const StudentForm = () => {
   const [students, setStudents] = useState([]);
@@ -86,7 +87,7 @@ const StudentForm = () => {
   }, [formData]);
 
   return (
-    <Box sx={{ p: 3, maxWidth: 800, mx: "auto", bgcolor: "#FFFFFF",minHeight: "100%" }}>
+    <MainForm>
       <Typography variant="h5" component="h1">
         Student Registration
       </Typography>
@@ -204,7 +205,7 @@ const StudentForm = () => {
             Add
           </Button>
         </Box>
-        <Divider sx={{ width: "100%", mb: 3, bgcolor: "#C3C3C3", mt: -1,mb:-1 }} />
+        <Divider sx={{ width: "100%", bgcolor: "#C3C3C3", mt: -1, mb: -1 }} />
         {/* Table */}
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -250,7 +251,7 @@ const StudentForm = () => {
           </Button>
         </Box>
       </Box>
-    </Box>
+    </MainForm>
   );
 };
 

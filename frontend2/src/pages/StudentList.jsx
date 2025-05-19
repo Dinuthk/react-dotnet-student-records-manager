@@ -18,6 +18,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { deleteStudent, getStudents } from "../services/studentService";
 import { useNavigate } from "react-router-dom";
+import MainForm from "../components/forms/MainForm";
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
@@ -83,7 +84,7 @@ const StudentList = () => {
   );
 
   return (
-    <Box sx={{ p: 3, maxWidth: 800, mx: "auto" }}>
+    <MainForm>
       <Typography variant="h5" component="h1">
         Student List
       </Typography>
@@ -169,7 +170,7 @@ const StudentList = () => {
           </Table>
         </TableContainer>
       </Box>
-    </Box>
+    </MainForm>
   );
 };
 

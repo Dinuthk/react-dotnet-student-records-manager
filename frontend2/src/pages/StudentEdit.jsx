@@ -4,6 +4,7 @@ import { Typography, Box, TextField, Button, Divider } from "@mui/material";
 import { Table, Radio, RadioGroup, FormControlLabel } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { getStudentById, updateStudent } from "../services/studentService";
+import MainForm from "../components/forms/MainForm";
 
 const StudentEdit = () => {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ const StudentEdit = () => {
   };
 
   return (
-    <Box sx={{ p: 3, maxWidth: 800, mx: "auto" }}>
+    <MainForm>
       <Typography variant="h5" component="h1">
         Student Details Edit
       </Typography>
@@ -168,7 +169,7 @@ const StudentEdit = () => {
           </Button>
         </Box>
       </Box>
-    </Box>
+    </MainForm>
   );
 };
 
