@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Box, TextField, Button } from "@mui/material";
+import { Typography, Box, TextField, Button, Divider } from "@mui/material";
 import {
   Table,
   Radio,
@@ -86,12 +86,22 @@ const StudentForm = () => {
   }, [formData]);
 
   return (
-    <Box sx={{ p: 3, maxWidth: 800, mx: "auto" }}>
+    <Box sx={{ p: 3, maxWidth: 800, mx: "auto", bgcolor: "#FFFFFF",minHeight: "100%" }}>
       <Typography variant="h5" component="h1">
         Student Registration
       </Typography>
 
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 4 }}>
+      <Divider sx={{ width: "100%", mb: 3, bgcolor: "#C3C3C3", mt: 2 }} />
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          mt: 4,
+          padding: 2,
+        }}
+      >
         {/* Full Name Field */}
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
           <Typography sx={{ width: "120px" }}>Full Name</Typography>
@@ -194,7 +204,7 @@ const StudentForm = () => {
             Add
           </Button>
         </Box>
-
+        <Divider sx={{ width: "100%", mb: 3, bgcolor: "#C3C3C3", mt: -1,mb:-1 }} />
         {/* Table */}
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">

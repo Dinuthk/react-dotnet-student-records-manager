@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Typography, Box, TextField, Button } from "@mui/material";
+import { Typography, Box, TextField, Button, Divider } from "@mui/material";
 import { Table, Radio, RadioGroup, FormControlLabel } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { getStudentById, updateStudent } from "../services/studentService";
@@ -44,7 +44,7 @@ const StudentEdit = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleUpdate = async(e) => {
+  const handleUpdate = async (e) => {
     try {
       if (window.confirm("Are you sure you want to update this student?")) {
         await updateStudent(id, formData);
@@ -62,7 +62,7 @@ const StudentEdit = () => {
       <Typography variant="h5" component="h1">
         Student Details Edit
       </Typography>
-
+      <Divider sx={{ width: "100%", mb: 3, bgcolor: "#C3C3C3", mt: 2 }} />
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 4 }}>
         {/* Full Name Field */}
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>

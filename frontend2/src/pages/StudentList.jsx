@@ -12,6 +12,7 @@ import {
   TableRow,
   Paper,
   IconButton,
+  Divider,
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -82,14 +83,13 @@ const StudentList = () => {
   );
 
   return (
-    <Box sx={{ p: 3, maxWidth: 1000, mx: "auto" }}>
+    <Box sx={{ p: 3, maxWidth: 800, mx: "auto" }}>
       <Typography variant="h5" component="h1">
         Student List
       </Typography>
-
+      <Divider sx={{ width: "100%", mb: 3, bgcolor: "#C3C3C3", mt: 2 }} />
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 4 }}>
         <Typography sx={{ width: "120px" }}>Telephone</Typography>
-
         {/* Telephone Field With Search Button */}
         <Box
           sx={{
@@ -114,6 +114,7 @@ const StudentList = () => {
           </Button>
         </Box>
 
+        <Divider sx={{ width: "100%", bgcolor: "#C3C3C3",mb: -1 }} />
         {/* Table */}
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
