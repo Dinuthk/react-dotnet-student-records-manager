@@ -24,29 +24,16 @@ namespace backend.Controllers
             return Ok(allStudents); // return 200 OK http response
         }
 
-        //[HttpGet]
-        //[Route("{id:guid}")] // localhost:3306/api/Students/{id}
-        //public IActionResult GetEmployeeById(Guid id)
-        //{
-        //    var students = dbContext.Students.Find(id);
-        //    if (students is null)
-        //    {
-        //        return NotFound(); // return 404 Not Found http response
-        //    }
-        //    return Ok(students); // return 200 OK http response
-        //}
         [HttpGet]
-        [Route("{phone}")] // e.g. localhost:5000/api/Students/by-phone/0711234567
-        public IActionResult GetStudentByPhone(string phone)
+        [Route("{id}")] // localhost:3306/api/Students/{id}
+        public IActionResult GetEmployeeById(int id)
         {
-            var student = dbContext.Students.FirstOrDefault(s => s.Telephone == phone);
-
-            if (student is null)
+            var students = dbContext.Students.Find(id);
+            if (students is null)
             {
-                return NotFound(); // return 404 Not Found if not found
+                return NotFound(); // return 404 Not Found http response
             }
-
-            return Ok(student); // return 200 OK with student data
+            return Ok(students); // return 200 OK http response
         }
 
 
@@ -70,8 +57,8 @@ namespace backend.Controllers
         }
 
         [HttpPut]
-        [Route("{id:guid}")] // localhost:3306/api/employees/{id}
-        public IActionResult UpdateStudent(Guid id, StudentDto updateStudentDto)
+        [Route("{id}")] // localhost:3306/api/employees/{id}
+        public IActionResult UpdateStudent(int id, StudentDto updateStudentDto)
         {
             var student = dbContext.Students.Find(id);
 
@@ -93,10 +80,10 @@ namespace backend.Controllers
         }
 
         [HttpDelete]
-        [Route("{telephone}")]
-        public IActionResult DeleteStudent(int telephone)
+        [Route("{id}")]
+        public IActionResult DeleteStudent(int id)
         {
-            var student = dbContext.Students.Find(telephone);
+            var student = dbContext.Students.Find(id);
 
             if (student is null)
             {

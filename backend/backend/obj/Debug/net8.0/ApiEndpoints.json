@@ -27,6 +27,22 @@
   },
   {
     "ContainingType": "backend.Controllers.StudentController",
+    "Method": "GetEmployeeById",
+    "RelativePath": "api/Student/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.StudentController",
     "Method": "UpdateStudent",
     "RelativePath": "api/Student/{id}",
     "HttpMethod": "PUT",
@@ -35,7 +51,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Guid",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -48,30 +64,14 @@
   },
   {
     "ContainingType": "backend.Controllers.StudentController",
-    "Method": "GetStudentByPhone",
-    "RelativePath": "api/Student/{phone}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "phone",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "backend.Controllers.StudentController",
     "Method": "DeleteStudent",
-    "RelativePath": "api/Student/{telephone}",
+    "RelativePath": "api/Student/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "telephone",
+        "Name": "id",
         "Type": "System.Int32",
         "IsRequired": true
       }
